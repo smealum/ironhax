@@ -18,9 +18,15 @@ build/constants: iron_ropdb/ropdb.txt
 	@python $(SCRIPTS)/makeHeaders.py build/constants $^
 
 
-build/Data0: $(wildcard iron_save/*.s)
+build/Data0: $(wildcard iron_save/*.s) build/iron_code.bin
 	@cd iron_save && make
 	@cp iron_save/Data0 $@
+
+
+build/iron_code.bin: iron_code/iron_code.bin
+	@cp iron_code/iron_code.bin build/
+iron_code/iron_code.bin: $(wildcard iron_code/source/*)
+	@cd iron_code && make
 
 
 iron_ropdb: $(ROPDB_TARGETS)
