@@ -11,6 +11,23 @@
 
 #define LINEAR_BUFFER ((u8*)0x31000000)
 
+Result gspwn(void* dst, void* src, u32 size)
+{
+	u32 gxCommand[]=
+	{
+		0x00000004, //command header (SetTextureCopy)
+		(u32)src, //source address
+		(u32)dst, //destination address
+		size, //size
+		0xFFFFFFFF, // dim in
+		0xFFFFFFFF, // dim out
+		0x00000008, // flags
+		0x00000000, //unused
+	};
+
+	return _GSPGPU_GxTryEnqueue(sharedGspCmdBuf, gxCommand);
+}
+
 void _main()
 {
 	Handle fileHandle = 0x0;
@@ -29,6 +46,23 @@ void _main()
 	u32 decompressed_size = lzss_get_decompressed_size(compressed_buffer, compressed_size);
 
 	ret = lzss_decompress(compressed_buffer, compressed_size, decompressed_buffer, decompressed_size);	
+
+	ret = _GSPGPU_FlushDataCache(gspHandle, 0xFFFF8001, (u32*)decompressed_buffer, decompressed_size);
+	ret = gspwn((void*)(0x37a00000 + 0x00101000 - 0x00100000), decompressed_buffer, (decompressed_size + 0x1f) & ~0x1f);
+	svc_sleepThread(100*1000*1000);
+
+	{
+		void (*payload)(u32* paramlk) = (void*)0x00101000;
+		u32* paramblk = (u32*)LINEAR_BUFFER;
+
+		paramblk[0x1c >> 2] = IRON_GSPGPU_GXCMD4;
+		paramblk[0x20 >> 2] = IRON_GSPGPU_FLUSHDATACACHE_WRAPPER;
+		paramblk[0x48 >> 2] = 0x8d; // flags
+		paramblk[0x58 >> 2] = IRON_GSPGPU_HANDLE;
+		paramblk[0x64 >> 2] = 0x08010000;
+
+		payload(paramblk);	
+	}
 
 	*(u32*)ret = 0xdead0008;
 }
