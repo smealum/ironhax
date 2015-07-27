@@ -17,8 +17,9 @@
 	("ROP_IRON_LDRR0R0_POPR4PC", 0x0014a870, 0x2),
 
 	# handles
-	("IRON_FS_HANDLE", 0x001512A4, 0x4, 0xA),
-	("IRON_GSPGPU_HANDLE", 0x00153418, 0x8, 0x1F),
+	("IRON_FS_HANDLE", 0x001512A4, 0x4, 0xa),
+	("IRON_DSP_HANDLE", 0x00146b6c, 0x5, 0xc),
+	("IRON_GSPGPU_HANDLE", 0x00153418, 0x8, 0x1f),
 
 	# functions
 	("IRON_FSUSER_OPENFILEDIRECTLY", 0x001e8b9c, 0x10), # r0 : &handle, r1 : &file_handle, r2 : transaction, r3 : archive_id, sp+0 : archive_path_type, sp+4 : *archive_path, sp+8 : archive_path_length, sp+0xC : path_type, sp+0x10 : path, sp+0x14 : pathlength, sp+0x18 : openflags, sp+0x1c : attributes
@@ -27,6 +28,8 @@
 	("IRON_GSPGPU_GXCMD4", 0x001aac6c, 0x8),
 	("IRON_GSPGPU_FLUSHDATACACHE", 0x001aad3c, 0xf),
 	("IRON_GSPGPU_FLUSHDATACACHE_WRAPPER", 0x001a6298, 0x5),
+	("IRON_DSP_UNLOADCOMPONENT", 0x0016d488, 0xa),
+	("IRON_DSP_REGISTERINTERRUPTEVENTS", 0x0016d59c, 0xf),
 	("IRON_SVC_SLEEPTHREAD", 0x001dec0c, 0x2),
 	("IRON_MEMCPY", 0x001f0948, 0x10),
 

@@ -75,6 +75,10 @@ void _main()
 	_GSPGPU_SetBufferSwap(*gspHandle, 0, (GSP_FramebufferInfo){0, (u32*)top_framebuffer, (u32*)top_framebuffer, 240 * 3, (1<<8)|(1<<6)|1, 0, 0});
 	_GSPGPU_SetBufferSwap(*gspHandle, 1, (GSP_FramebufferInfo){0, (u32*)low_framebuffer, (u32*)low_framebuffer, 240 * 3, 1, 0, 0});
 
+	// un-init DSP so killing Ironfall will work
+	_DSP_UnloadComponent(dspHandle);
+	_DSP_RegisterInterruptEvents(dspHandle, 0x0, 0x2, 0x2);
+
 	// run payload
 	{
 		void (*payload)(u32* paramlk) = (void*)0x00101000;
