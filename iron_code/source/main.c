@@ -5,6 +5,7 @@
 #include <ctr/srv.h>
 #include <ctr/svc.h>
 #include <ctr/FS.h>
+#include <ctr/GSP.h>
 
 #include "decomp.h"
 #include "imports.h"
@@ -28,6 +29,20 @@ Result gspwn(void* dst, void* src, u32 size)
 	return _GSPGPU_GxTryEnqueue(sharedGspCmdBuf, gxCommand);
 }
 
+Result _GSPGPU_SetBufferSwap(Handle handle, u32 screenid, GSP_FramebufferInfo framebufinfo)
+{
+	Result ret=0;
+	u32 *cmdbuf = getThreadCommandBuffer();
+
+	cmdbuf[0] = 0x00050200;
+	cmdbuf[1] = screenid;
+	memcpy(&cmdbuf[2], &framebufinfo, sizeof(GSP_FramebufferInfo));
+	
+	if((ret=svc_sendSyncRequest(handle)))return ret;
+
+	return cmdbuf[1];
+}
+
 void _main()
 {
 	Handle fileHandle = 0x0;
@@ -36,6 +51,7 @@ void _main()
 	u32 compressed_size = 0x0;
 	u8* compressed_buffer = LINEAR_BUFFER;
 
+	// load payload.bin from savegame
 	ret = _FSUSER_OpenFileDirectly(fsHandle, &fileHandle, 0x0, 0x00000004, PATH_EMPTY, "", 1, PATH_CHAR, "/payload.bin", 13, 0x1, 0x0);
 	if(ret)*(u32*)ret = 0xdead0001;
 
@@ -45,12 +61,21 @@ void _main()
 	u8* decompressed_buffer = &compressed_buffer[(compressed_size + 0xfff) & ~0xfff];
 	u32 decompressed_size = lzss_get_decompressed_size(compressed_buffer, compressed_size);
 
+	// decompress payload
 	ret = lzss_decompress(compressed_buffer, compressed_size, decompressed_buffer, decompressed_size);	
 
+	// copy payload to text
 	ret = _GSPGPU_FlushDataCache(gspHandle, 0xFFFF8001, (u32*)decompressed_buffer, decompressed_size);
 	ret = gspwn((void*)(0x37a00000 + 0x00101000 - 0x00100000), decompressed_buffer, (decompressed_size + 0x1f) & ~0x1f);
 	svc_sleepThread(100*1000*1000);
 
+	// put framebuffers in linear mem so they're writable
+	u8* top_framebuffer = &LINEAR_BUFFER[0x00100000];
+	u8* low_framebuffer = &top_framebuffer[0x00046500];
+	_GSPGPU_SetBufferSwap(*gspHandle, 0, (GSP_FramebufferInfo){0, (u32*)top_framebuffer, (u32*)top_framebuffer, 240 * 3, (1<<8)|(1<<6)|1, 0, 0});
+	_GSPGPU_SetBufferSwap(*gspHandle, 1, (GSP_FramebufferInfo){0, (u32*)low_framebuffer, (u32*)low_framebuffer, 240 * 3, 1, 0, 0});
+
+	// run payload
 	{
 		void (*payload)(u32* paramlk) = (void*)0x00101000;
 		u32* paramblk = (u32*)LINEAR_BUFFER;
