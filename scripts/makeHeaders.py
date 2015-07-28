@@ -7,32 +7,43 @@ def outputConstantsH(d):
 	out+=("#ifndef CONSTANTS_H")+"\n"
 	out+=("#define CONSTANTS_H")+"\n"
 	for k in d:
-		out+=("	#define "+k[0]+" "+str(k[1]))+"\n"
+		out+=("	#define "+k+" "+str(d[k]))+"\n"
 	out+=("#endif")+"\n"
 	return out
 
 def outputConstantsS(d):
 	out=""
 	for k in d:
-		out+=(k[0]+" equ ("+str(k[1])+")")+"\n"
+		out+=(k+" equ ("+str(d[k])+")")+"\n"
 	return out
 
 def outputConstantsPY(d):
 	out=""
 	for k in d:
-		out+=(k[0]+" = ("+str(k[1])+")")+"\n"
+		out+=(k+" = ("+str(d[k])+")")+"\n"
 	return out
 
 if len(sys.argv)<1:
-	print("use : "+sys.argv[0]+" <extensionless_output_name> <input_file1> <input_file2> ...")
+	print("use : "+sys.argv[0]+" <extensionless_output_name> <input_file1> <const=value> <input_file2> ...")
 	exit()
 
-l = [("BUILDTIME", "\""+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+"\"")]
+l = {"BUILDTIME" : "\""+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+"\""}
 
-for fn in sys.argv[2:]:
-	s=open(fn,"r").read()
-	if len(s)>0:
-		l+=(ast.literal_eval(s))
+for a in sys.argv[2:]:
+	if "=" in a:
+		a = a.split("=")
+		l[a[0]] = a[1]
+	else:
+		s=open(a, "r").read()
+		if len(s) > 0:
+			l.update(ast.literal_eval(s))
+
+if "FIRM_VERSION" in l and l["FIRM_VERSION"] == "NEW":
+	l["FIRM_SYSTEM_LINEAR_OFFSET"] = "0x07C00000"
+else:
+	l["FIRM_SYSTEM_LINEAR_OFFSET"] = "0x04000000"
+	
+l["IRON_CODE_LINEAR_BASE"] = "(0x30000000 + FIRM_SYSTEM_LINEAR_OFFSET - 0x00200000)"
 
 open(sys.argv[1]+".h","w").write(outputConstantsH(l))
 open(sys.argv[1]+".s","w").write(outputConstantsS(l))

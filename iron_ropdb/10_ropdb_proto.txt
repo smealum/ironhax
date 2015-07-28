@@ -13,6 +13,9 @@
 	("ROP_IRON_POP_R4LR_BX_R1", 0x0024b0d0, 0x2),
 	("ROP_IRON_NOP", 0x0010d454, 0x1),
 
+	# jump gadgets
+	("ROP_IRON_BX_R1", 0x0024b0d4, 0x1),
+
 	# load gadgets
 	("ROP_IRON_LDRR0R0_POPR4PC", 0x0014a870, 0x2),
 

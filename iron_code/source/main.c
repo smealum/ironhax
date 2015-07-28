@@ -66,7 +66,7 @@ void _main()
 
 	// copy payload to text
 	ret = _GSPGPU_FlushDataCache(gspHandle, 0xFFFF8001, (u32*)decompressed_buffer, decompressed_size);
-	ret = gspwn((void*)(0x37a00000 + 0x00101000 - 0x00100000), decompressed_buffer, (decompressed_size + 0x1f) & ~0x1f);
+	ret = gspwn((void*)(IRON_CODE_LINEAR_BASE + 0x00101000 - 0x00100000), decompressed_buffer, (decompressed_size + 0x1f) & ~0x1f);
 	svc_sleepThread(100*1000*1000);
 
 	// put framebuffers in linear mem so they're writable

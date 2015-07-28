@@ -1,7 +1,7 @@
 rop:
 	memcpy LINEAR_BUFFER, IRON_SAVE0_BUFFER_PTR + initial_code, initial_code_end - initial_code
 	flush_dcache LINEAR_BUFFER, 0x2000
-	gspwn (0x37a00000 + PAYLOAD_VA - 0x00100000), LINEAR_BUFFER, 0x2000
+	gspwn (IRON_CODE_LINEAR_BASE + (PAYLOAD_VA - 0x00100000)), LINEAR_BUFFER, 0x2000
 
 	sleep 100*1000*1000, 0
 

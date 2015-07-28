@@ -58,7 +58,7 @@ clean:
 
 -include $(DFILES)
 
-build/%.o: source/%.c
+build/%.o: source/%.c ../build/constants.h
 	$(CC) $(CFLAGS) -c $< -o $@
 	@$(CC) -MM $< > build/$*.d
 
