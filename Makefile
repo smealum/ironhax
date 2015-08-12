@@ -1,28 +1,26 @@
-IRON_VERSION := 11_eu
-FIRM_VERSION := OLD
-
 ROPDB_VERSIONS = 10 11 10_eu 11_eu
 ROPDB_TARGETS = $(addsuffix _ropdb.txt, $(addprefix iron_ropdb/, $(ROPDB_VERSIONS)))
 ROPDB_TARGET = iron_ropdb/$(IRON_VERSION)_ropdb.txt
+
+DATA_TARGET = Data$(IRON_SAVESLOT)_$(IRON_VERSION)_$(FIRM_VERSION)
 
 SCRIPTS = "scripts"
 
 .PHONY: directories all build/constants clean
 
-all: directories build/constants build/Data0
+all: directories build/constants installer/data/$(DATA_TARGET).bin
 directories:
 	@mkdir -p build && mkdir -p build/cro
-	@mkdir -p p
-	@mkdir -p q
+	@mkdir -p installer/data
 
 
 build/constants: iron_ropdb/ropdb.txt
 	@python $(SCRIPTS)/makeHeaders.py build/constants "IRON_VERSION=$(IRON_VERSION)" "FIRM_VERSION=$(FIRM_VERSION)" $^
 
 
-build/Data0: $(wildcard iron_save/*.s) build/iron_code.bin
+installer/data/$(DATA_TARGET).bin: $(wildcard iron_save/*.s) build/iron_code.bin
 	@cd iron_save && make
-	@cp iron_save/Data0 $@
+	@cp iron_save/Data $@
 
 
 build/iron_code.bin: iron_code/iron_code.bin

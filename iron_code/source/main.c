@@ -81,7 +81,7 @@ void _main()
 
 	// run payload
 	{
-		void (*payload)(u32* paramlk) = (void*)0x00101000;
+		void (*payload)(u32* paramlk, u32* stack_pointer) = (void*)0x00101000;
 		u32* paramblk = (u32*)LINEAR_BUFFER;
 
 		paramblk[0x1c >> 2] = IRON_GSPGPU_GXCMD4;
@@ -90,7 +90,7 @@ void _main()
 		paramblk[0x58 >> 2] = IRON_GSPGPU_HANDLE;
 		paramblk[0x64 >> 2] = 0x08010000;
 
-		payload(paramblk);	
+		payload(paramblk, (u32*)(0x10000000 - 4));
 	}
 
 	*(u32*)ret = 0xdead0008;

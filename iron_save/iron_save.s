@@ -1,6 +1,6 @@
 .nds
 
-.create "Data0",0x0
+.create "Data",0x0
 
 .loadtable "unicode.tbl"
 

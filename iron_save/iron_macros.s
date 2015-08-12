@@ -50,7 +50,7 @@
 	.word ROP_IRON_POP_R0PC ; pop {r0, pc}
 		.word IRON_GSPGPU_INTERRUPT_RECEIVER_STRUCT + 0x58 ; r0 (nn__gxlow__CTR__detail__GetInterruptReceiver)
 	.word ROP_IRON_POP_R1PC ; pop {r1, pc}
-		.word IRON_SAVE0_BUFFER_PTR + @@gxCommandPayload ; r1 (cmd addr)
+		.word IRON_SAVE_BUFFER_PTR + @@gxCommandPayload ; r1 (cmd addr)
 	.word IRON_GSPGPU_GXTRYENQUEUE
 		@@gxCommandPayload:
 		.word 0x00000004 ; command header (SetTextureCopy)
