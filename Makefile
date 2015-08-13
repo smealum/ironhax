@@ -15,7 +15,7 @@ directories:
 
 
 build/constants: iron_ropdb/ropdb.txt
-	@python $(SCRIPTS)/makeHeaders.py build/constants "IRON_VERSION=$(IRON_VERSION)" "FIRM_VERSION=$(FIRM_VERSION)" $^
+	@python $(SCRIPTS)/makeHeaders.py build/constants "IRON_VERSION=$(IRON_VERSION)" "FIRM_VERSION=$(FIRM_VERSION)" "IRON_SAVESLOT=$(IRON_SAVESLOT)" $^
 
 
 installer/data/$(DATA_TARGET).bin: $(wildcard iron_save/*.s) build/iron_code.bin
@@ -38,5 +38,6 @@ iron_ropdb/%_ropdb.txt: iron_ropdb/10_ropdb_proto.txt
 
 clean:
 	@rm -rf build
+	@rm iron_ropdb/ropdb.txt
 	@cd iron_save && make clean
 	@cd iron_code && make clean

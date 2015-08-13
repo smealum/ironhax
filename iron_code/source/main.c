@@ -62,7 +62,7 @@ void _main()
 	u32 decompressed_size = lzss_get_decompressed_size(compressed_buffer, compressed_size);
 
 	// decompress payload
-	ret = lzss_decompress(compressed_buffer, compressed_size, decompressed_buffer, decompressed_size);	
+	ret = lzss_decompress(compressed_buffer, compressed_size, decompressed_buffer, decompressed_size);
 
 	// copy payload to text
 	ret = _GSPGPU_FlushDataCache(gspHandle, 0xFFFF8001, (u32*)decompressed_buffer, decompressed_size);

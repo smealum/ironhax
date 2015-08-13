@@ -274,7 +274,7 @@ int main()
 				}
 				break;
 			case STATE_COMPRESS_PAYLOAD:
-				payload_buf = BLZ_Code(payload_buf, payload_size, (unsigned int*)&payload_size, BLZ_BEST);
+				payload_buf = BLZ_Code(payload_buf, payload_size, (unsigned int*)&payload_size, BLZ_NORMAL);
 				next_state = STATE_INSTALL_PAYLOAD;
 				break;
 			case STATE_INSTALL_PAYLOAD:
@@ -299,7 +299,7 @@ int main()
 						break;
 					}
 
-					next_state = STATE_NONE;	
+					next_state = STATE_INSTALLED_PAYLOAD;	
 				}
 				break;
 			case STATE_INSTALLED_PAYLOAD:

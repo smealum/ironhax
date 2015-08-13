@@ -33,7 +33,7 @@
 
 .orga 0x500
 	object_buffer:
-		.word 0xDEADBABE ; pc
+		.word 0xDEADBABE
 		.word 0xDADADADA
 		.word 0xDADADADA
 		.word 0xDADADADA
