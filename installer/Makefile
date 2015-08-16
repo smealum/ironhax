@@ -32,6 +32,10 @@ SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
 
+APP_TITLE       := ironhax installer
+APP_DESCRIPTION := Use this to install ironhax to your system. Requires    IronFall and an internet connection.
+APP_AUTHOR      := smea
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------

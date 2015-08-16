@@ -154,7 +154,7 @@ int main()
 			switch(next_state)
 			{
 				case STATE_INITIAL:
-					strcat(top_text, " Welcome to the ironhax installer ! Please proceedwith caution, as you might lose data if you don't.\n                            Press A to continue.\n\n");
+					strcat(top_text, " Welcome to the ironhax installer ! Please proceedwith caution, as you might lose data if you don't.You may press START at any time to return to menu.\n                            Press A to continue.\n\n");
 					break;
 				case STATE_SELECT_SLOT:
 					strcat(top_text, " Please select the savegame slot IRONHAX will be\ninstalled to. D-Pad to select, A to continue.\n");
@@ -176,7 +176,7 @@ int main()
 					strcat(top_text, " Installing payload...\n");
 					break;
 				case STATE_INSTALLED_PAYLOAD:
-					strcat(top_text, " Done ! ironhax was successfully installed.\n");
+					strcat(top_text, " Done ! ironhax was successfully installed.");
 					break;
 				case STATE_ERROR:
 					strcat(top_text, " Looks like something went wrong. :(\n");
