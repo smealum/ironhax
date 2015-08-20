@@ -67,7 +67,15 @@ void _main()
 	// copy payload to text
 	ret = _GSPGPU_FlushDataCache(gspHandle, 0xFFFF8001, (u32*)decompressed_buffer, decompressed_size);
 	ret = gspwn((void*)(IRON_CODE_LINEAR_BASE + 0x00101000 - 0x00100000), decompressed_buffer, (decompressed_size + 0x1f) & ~0x1f);
-	svc_sleepThread(100*1000*1000);
+	svc_sleepThread(300*1000*1000);
+
+	// ghetto dcache invalidation
+	// don't judge me
+	int i, j;//, k;
+	// for(k=0; k<0x2; k++)
+		for(j=0; j<0x4; j++)
+			for(i=0; i<0x01000000/0x4; i+=0x4)
+				LINEAR_BUFFER[i+j]^=0xDEADBABE;
 
 	// put framebuffers in linear mem so they're writable
 	u8* top_framebuffer = &LINEAR_BUFFER[0x00100000];

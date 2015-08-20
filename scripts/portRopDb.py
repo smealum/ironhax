@@ -11,7 +11,8 @@ def findPattern(p, t, addr, size):
 		pattern += [getWord(p, addr + i*4, 4)]
 	k = 0
 	# not a perfect pattern search, but most likely good enough
-	for i in range(0, len(t), 4):
+	# for i in range(0, len(t), 4):
+	for i in range(0xb000, len(t), 4):
 		candidate = getWord(t, i, 4)
 		if candidate == pattern[k]:
 			if k+1 == size:
