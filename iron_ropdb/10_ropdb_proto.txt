@@ -3,6 +3,9 @@
 [
 	# stack pivot
 	("STACK_PIVOT_PTR", 0x00101264, 0x1), # ldmdbge r0, {r0, r2, r3, r7, ip, sp, pc}
+
+	("IRON_PREPIVOT", 0x0029b038, 0x4), # ldr r1, [r0, #0x68]!; sub sp, sp, #32; add r0, r0, #8; blx r1
+	("IRON_PIVOT", 0x002217f0, 0x1), # ldmdage r0, {r0, r1, r8, fp, sp, pc}
 	
 	# pop gadgets
 	("ROP_IRON_POP_R0PC", 0x002232d0, 0x1),
